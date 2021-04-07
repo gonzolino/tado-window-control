@@ -24,8 +24,7 @@ jobs:
         with:
           name: tado-window-close
           runtime: go113
-          entrypoint: CloseWindow
-          memory_mb: 256
+          entry_point: CloseWindow
           region: ${{ secrets.GCP_REGION }}
           env_vars: GCP_PROJECT=${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
