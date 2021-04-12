@@ -17,7 +17,7 @@ type SecretManager struct {
 func NewSecretManager(ctx context.Context) (*SecretManager, error) {
 	client, err := secretmanager.NewClient(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to create secretmanager client: %w", err)
+		return nil, fmt.Errorf("unable to create secretmanager client: %w", err)
 	}
 	return &SecretManager{
 		client: client,
@@ -31,7 +31,7 @@ func (sm *SecretManager) AccessSecret(ctx context.Context, projectID, secretName
 	}
 	result, err := sm.client.AccessSecretVersion(ctx, req)
 	if err != nil {
-		return "", fmt.Errorf("Unable to access secret %s in project %s: %w", secretName, projectID, err)
+		return "", fmt.Errorf("unable to access secret %s in project %s: %w", secretName, projectID, err)
 	}
 	return string(result.Payload.Data), nil
 }

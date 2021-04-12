@@ -13,12 +13,12 @@ const (
 func isValidToken(ctx context.Context, secretmanager *SecretManager, projectID, token string) (bool, error) {
 	tokenStr, err := secretmanager.AccessSecret(ctx, projectID, secretAuthTokens)
 	if err != nil {
-		return false, fmt.Errorf("Can't check authentication token: %v", err)
+		return false, fmt.Errorf("can't check authentication token: %v", err)
 	}
 
 	var tokens []string
 	if err := json.Unmarshal([]byte(tokenStr), &tokens); err != nil {
-		return false, fmt.Errorf("Secret '%s' must be valid json: %v", secretAuthTokens, err)
+		return false, fmt.Errorf("secret '%s' must be valid json: %v", secretAuthTokens, err)
 	}
 
 	for _, t := range tokens {
