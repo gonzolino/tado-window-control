@@ -8,13 +8,11 @@ on:
 
 jobs:
   deploy:
+    name: Cloud Function
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy function 'tado-window-close'
-        uses: google-github-actions/deploy-cloud-functions@v0.4.0
+      - uses: actions/checkout@v2
+      - uses: google-github-actions/deploy-cloud-functions@v0.4.0
         with:
           name: tado-window-close
           runtime: go113
