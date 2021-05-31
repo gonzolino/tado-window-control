@@ -132,6 +132,26 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	state, err := gotado.GetZoneState(tadoClient, userHome, zone)
+	if err != nil {
+		log.Printf("Failed to get zone state from tado°: %v", err)
+		httpError(w, http.StatusInternalServerError)
+		return
+	}
+	if state.Overlay != nil {
+		// If heating was turned off manually, we assume it was turned off
+		// because of an open window. We can therefore return to normal heating
+		// when the window is closed.
+		if state.Overlay.Type == "MANUAL" && state.Overlay.Setting.Power == "OFF" {
+			if err := gotado.DeleteZoneOverlay(tadoClient, userHome, zone); err != nil {
+				log.Printf("Failed to delete manual tado° zone overlay: %v", err)
+				httpError(w, http.StatusInternalServerError)
+				return
+			}
+		}
+
+	}
+
 	if err := gotado.SetWindowClosed(tadoClient, userHome, zone); err != nil {
 		log.Printf("Failed to close window with tado° API: %v", err)
 		httpError(w, http.StatusInternalServerError)
