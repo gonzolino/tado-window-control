@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.1](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.0...v1.1.1) (2021-05-31)
+
+
+### Bug Fixes
+
+* Deploy on release instead of tag ([4667996](https://www.github.com/gonzolino/tado-window-control/commit/46679963182729a3f834767ff750fc1600b2c1b2))
+
 ## [1.1.0](https://www.github.com/gonzolino/tado-window-control/compare/v1.0.0...v1.1.0) (2021-05-31)
 
 
