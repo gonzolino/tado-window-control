@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.2](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.1...v1.1.2) (2021-06-04)
+
+
+### Bug Fixes
+
+* delete zone overlay even if it is not off ([241db58](https://www.github.com/gonzolino/tado-window-control/commit/241db58efd66f4c03be58b1a82a2bd67e1981850))
+
 ### [1.1.1](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.0...v1.1.1) (2021-05-31)
 
 
