@@ -14,8 +14,6 @@ import (
 const (
 	secretTadoUsername = "tado_username"
 	secretTadoPassword = "tado_password"
-	tadoClientID       = "tado-web-app"
-	tadoClientSecret   = "wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc"
 )
 
 // TadoWindowCloseAction holds tado° zone in which a window was closed
@@ -52,6 +50,18 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 	projectID, ok := os.LookupEnv("GCP_PROJECT")
 	if !ok {
 		log.Println("Missing environment variable 'GCP_PROJECT'")
+		httpError(w, http.StatusInternalServerError)
+		return
+	}
+	tadoClientID, ok := os.LookupEnv("TADO_CLIENT_ID")
+	if !ok {
+		log.Println("Missing environment variable 'TADO_CLIENT_ID'")
+		httpError(w, http.StatusInternalServerError)
+		return
+	}
+	tadoClientSecret, ok := os.LookupEnv("TADO_CLIENT_SECRET")
+	if !ok {
+		log.Println("Missing environment variable 'TADO_CLIENT_SECRET'")
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
