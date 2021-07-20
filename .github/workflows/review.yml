@@ -16,6 +16,20 @@ on:
     - cron: "32 4 * * 5"
 
 jobs:
+  go-test:
+    name: Go Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.13
+      - run: go test -coverprofile=cover.out -v ./...
+      - uses: deepsourcelabs/test-coverage-action@v1.0.0
+        with:
+          key: go
+          coverage-file: cover.out
+          dsn: ${{ secrets.DEEPSOURCE_DSN }}
   codeql:
     name: CodeQL
     runs-on: ubuntu-latest
