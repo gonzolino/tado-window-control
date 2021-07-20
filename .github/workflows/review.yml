@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types:
-      - edited
-      - opened
-      - synchronize
-      - reopened
-    branches:
-      - main
   schedule:
     - cron: "32 4 * * 5"
 
