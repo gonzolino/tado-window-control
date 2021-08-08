@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.2...v1.2.0) (2021-08-08)
+
+
+### Features
+
+* read tado client id and secret from env vars ([f8b8062](https://www.github.com/gonzolino/tado-window-control/commit/f8b8062dddc45f29184d81c962ad3775b5ebf36f))
+
 ### [1.1.2](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.1...v1.1.2) (2021-06-04)
 
 
