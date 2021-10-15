@@ -11,7 +11,7 @@ jobs:
     name: Cloud Function
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - uses: google-github-actions/deploy-cloud-functions@v0.6.0
         with:
           name: tado-window-close
