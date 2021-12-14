@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.2.1](https://www.github.com/gonzolino/tado-window-control/compare/v1.2.0...v1.2.1) (2021-12-14)
+
+
+### Bug Fixes
+
+* ensure to use correct pointer in home loop ([45e09b8](https://www.github.com/gonzolino/tado-window-control/commit/45e09b8fb51c73d8d537401e7e4627fddc77c123))
+
 ## [1.2.0](https://www.github.com/gonzolino/tado-window-control/compare/v1.1.2...v1.2.0) (2021-08-08)
 
 
