@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.2.2](https://www.github.com/gonzolino/tado-window-control/compare/v1.2.1...v1.2.2) (2021-12-14)
+
+
+### Bug Fixes
+
+* do not print home name in http error ([8cce84f](https://www.github.com/gonzolino/tado-window-control/commit/8cce84fdc3e80d2824307e65620a8b27e9566629))
+* do not print zone name in http error ([387edee](https://www.github.com/gonzolino/tado-window-control/commit/387edeed9fe6f28d045a10aaec556a49a775c018))
+
 ### [1.2.1](https://www.github.com/gonzolino/tado-window-control/compare/v1.2.0...v1.2.1) (2021-12-14)
 
 
