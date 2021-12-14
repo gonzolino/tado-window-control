@@ -116,6 +116,7 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 	var userHome *gotado.UserHome
 	for _, h := range user.Homes {
 		if h.Name == action.HomeName {
+			h := h
 			userHome = &h
 			break
 		}
