@@ -122,7 +122,7 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if userHome == nil {
-		http.Error(w, fmt.Sprintf("Unkown home name %s", action.HomeName), http.StatusUnprocessableEntity)
+		http.Error(w, "Unkown home name", http.StatusUnprocessableEntity)
 		return
 	}
 	zones, err := gotado.GetZones(tadoClient, userHome)
@@ -139,7 +139,7 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if zone == nil {
-		http.Error(w, fmt.Sprintf("Unkown zone name %s", action.ZoneName), http.StatusUnprocessableEntity)
+		http.Error(w, "Unkown zone name", http.StatusUnprocessableEntity)
 		return
 	}
 
