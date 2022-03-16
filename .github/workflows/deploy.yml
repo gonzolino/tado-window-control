@@ -15,7 +15,7 @@ jobs:
       - uses: google-github-actions/deploy-cloud-functions@v0.9.0
         with:
           name: tado-window-close
-          runtime: go113
+          runtime: go116
           entry_point: CloseWindow
           credentials: ${{ secrets.GCP_SA_KEY }}
           region: ${{ secrets.GCP_REGION }}
