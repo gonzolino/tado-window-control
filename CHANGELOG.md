@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/gonzolino/tado-window-control/compare/v1.2.2...v1.3.0) (2022-03-16)
+
+
+### Features
+
+* Support new gcp function go runtime 1.16 ([7fdc168](https://github.com/gonzolino/tado-window-control/commit/7fdc168f68d21617d08226fcbb37cfb7ff41ee64))
+
 ### [1.2.2](https://www.github.com/gonzolino/tado-window-control/compare/v1.2.1...v1.2.2) (2021-12-14)
 
 
