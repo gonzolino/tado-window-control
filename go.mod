@@ -1,6 +1,6 @@
 module github.com/gonzolino/tado-window-control
 
-go 1.13
+go 1.16
 
 require (
 	cloud.google.com/go/secretmanager v1.2.0
