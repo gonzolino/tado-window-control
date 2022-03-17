@@ -6,12 +6,22 @@ on:
       - main
 
 jobs:
+  release-pr:
+    name: Release PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        with:
+          release-type: go
+          package-name: tado-window-control
+          command: release-pr
   release:
-    name: Release Please
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
         with:
           token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-          release-type: simple
+          release-type: go
           package-name: tado-window-control
+          command: github-release
