@@ -6,9 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
-	"github.com/gonzolino/gotado"
+	"github.com/gonzolino/gotado/v2"
 )
 
 const (
@@ -96,54 +95,38 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tadoClient, err := gotado.NewClient(tadoClientID, tadoClientSecret).
-		WithTimeout(5*time.Second).
-		WithCredentials(ctx, tadoUsername, tadoPassword)
-	if err != nil {
-		// Treat failed tado login as internal server error, since credentials,
-		// authentication, etc. of tado° is all managed on the server side. User has no
-		log.Printf("Failed tado° login: %v", err)
-		httpError(w, http.StatusInternalServerError)
-		return
-	}
+	// tadoClient, err := gotado.NewClient(tadoClientID, tadoClientSecret).
+	// 	WithTimeout(5*time.Second).
+	// 	WithCredentials(ctx, tadoUsername, tadoPassword)
+	// if err != nil {
+	// 	// Treat failed tado login as internal server error, since credentials,
+	// 	// authentication, etc. of tado° is all managed on the server side. User has no
+	// 	log.Printf("Failed tado° login: %v", err)
+	// 	httpError(w, http.StatusInternalServerError)
+	// 	return
+	// }
 
-	user, err := gotado.GetMe(tadoClient)
+	tado := gotado.New(tadoClientID, tadoClientSecret)
+	user, err := tado.Me(ctx, tadoUsername, tadoPassword)
 	if err != nil {
 		log.Printf("Failed to get user info from tado°: %v", err)
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
-	var userHome *gotado.UserHome
-	for _, h := range user.Homes {
-		if h.Name == action.HomeName {
-			h := h
-			userHome = &h
-			break
-		}
-	}
-	if userHome == nil {
-		http.Error(w, "Unkown home name", http.StatusUnprocessableEntity)
+	home, err := user.GetHome(ctx, action.HomeName)
+	if err != nil {
+		log.Printf("Failed to get home info from tado°: %v", err)
+		httpError(w, http.StatusInternalServerError)
 		return
 	}
-	zones, err := gotado.GetZones(tadoClient, userHome)
+	zone, err := home.GetZone(ctx, action.ZoneName)
 	if err != nil {
 		log.Printf("Failed to get home zones from tado°: %v", err)
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
-	var zone *gotado.Zone
-	for _, z := range zones {
-		if z.Name == action.ZoneName {
-			zone = z
-			break
-		}
-	}
-	if zone == nil {
-		http.Error(w, "Unkown zone name", http.StatusUnprocessableEntity)
-		return
-	}
 
-	state, err := gotado.GetZoneState(tadoClient, userHome, zone)
+	state, err := zone.GetState(ctx)
 	if err != nil {
 		log.Printf("Failed to get zone state from tado°: %v", err)
 		httpError(w, http.StatusInternalServerError)
@@ -154,8 +137,8 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		// because of an open window. We can therefore return to normal heating
 		// when the window is closed.
 		if state.Overlay.Type == "MANUAL" {
-			if err := gotado.DeleteZoneOverlay(tadoClient, userHome, zone); err != nil {
-				log.Printf("Failed to delete manual tado° zone overlay: %v", err)
+			if err := zone.ResumeSchedule(ctx); err != nil {
+				log.Printf("Failed to resume tado° zone schedule: %v", err)
 				httpError(w, http.StatusInternalServerError)
 				return
 			}
@@ -163,7 +146,7 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	if err := gotado.SetWindowClosed(tadoClient, userHome, zone); err != nil {
+	if err := zone.CloseWindow(ctx); err != nil {
 		log.Printf("Failed to close window with tado° API: %v", err)
 		httpError(w, http.StatusInternalServerError)
 		return
