@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/gonzolino/tado-window-control/compare/v1.3.0...v1.4.0) (2022-04-14)
+
+
+### Features
+
+* Update to gotado v2 ([939d628](https://github.com/gonzolino/tado-window-control/commit/939d628bab28129c3cfcb39fe03c2448faf46ce8))
+
 ## [1.3.0](https://github.com/gonzolino/tado-window-control/compare/v1.2.2...v1.3.0) (2022-03-16)
 
 
