@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.5.1](https://github.com/gonzolino/tado-window-control/compare/v1.5.0...v1.5.1) (2022-04-20)
+
+
+### Bug Fixes
+
+* use the correct google service account in WIF for deployment ([c918037](https://github.com/gonzolino/tado-window-control/commit/c918037154b76405ad312a8dbdd9b5faed07b1bf))
+
 ## [1.5.0](https://github.com/gonzolino/tado-window-control/compare/v1.4.0...v1.5.0) (2022-04-20)
 
 
