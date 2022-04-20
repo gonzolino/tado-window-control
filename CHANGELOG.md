@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/gonzolino/tado-window-control/compare/v1.4.0...v1.5.0) (2022-04-20)
+
+
+### Features
+
+* Switch deploy authentication to WIF ([14026d7](https://github.com/gonzolino/tado-window-control/commit/14026d7f7b6660ae44b110998444fa37b5e90c64))
+
 ## [1.4.0](https://github.com/gonzolino/tado-window-control/compare/v1.3.0...v1.4.0) (2022-04-14)
 
 
