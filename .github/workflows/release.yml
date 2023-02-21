@@ -21,6 +21,7 @@ jobs:
   deploy:
     if: ${{ needs.release-please.outputs.release_created }}
     name: Deploy Cloud Function
+    needs: release-please
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
