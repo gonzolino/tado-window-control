@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/gonzolino/tado-window-control/compare/v1.6.0...v1.6.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* Add missing dependency between release and deploy jobs ([04aa043](https://github.com/gonzolino/tado-window-control/commit/04aa043f5294c3fe6bab86ae28dbcc3acc17392c))
+
 ## [1.6.0](https://github.com/gonzolino/tado-window-control/compare/v1.5.1...v1.6.0) (2023-02-21)
 
 
