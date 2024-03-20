@@ -3,7 +3,7 @@ module github.com/gonzolino/tado-window-control
 go 1.19
 
 require (
-	cloud.google.com/go/secretmanager v1.11.6
+	cloud.google.com/go/secretmanager v1.12.0
 	github.com/gonzolino/gotado/v2 v2.1.0
 	google.golang.org/genproto v0.0.0-20240213162025-012b6fc9bca9
 )
