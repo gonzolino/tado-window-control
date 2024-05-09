@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/gonzolino/tado-window-control/compare/v1.6.1...v1.7.0) (2024-05-09)
+
+
+### Features
+
+* update to go 1.21 ([b1ddcbc](https://github.com/gonzolino/tado-window-control/commit/b1ddcbc3bd947d763d157088f75c1dca40cb40c9))
+
 ## [1.6.1](https://github.com/gonzolino/tado-window-control/compare/v1.6.0...v1.6.1) (2023-02-21)
 
 
