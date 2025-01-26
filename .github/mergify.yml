@@ -3,7 +3,6 @@ pull_request_rules:
     conditions:
       - author=dependabot[bot]
       - "check-success=CodeQL"
-      - "check-success=GitGuardian Security Checks"
       - "check-success=License Compliance"
     actions:
       review:
@@ -13,7 +12,6 @@ pull_request_rules:
     conditions:
       - author=gonzolino
       - "check-success=CodeQL"
-      - "check-success=GitGuardian Security Checks"
       - "check-success=License Compliance"
     actions:
       review:
