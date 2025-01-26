@@ -2,9 +2,7 @@ pull_request_rules:
   - name: Automatic approve for Dependabot
     conditions:
       - author=dependabot[bot]
-      - "check-success=DeepSource: Go"
-      - "check-success=DeepSource: Secrets"
-      - "check-success=DeepSource: Transformers"
+      - "check-success=CodeQL"
       - "check-success=GitGuardian Security Checks"
       - "check-success=License Compliance"
     actions:
@@ -14,9 +12,7 @@ pull_request_rules:
   - name: Automatic approve for owner
     conditions:
       - author=gonzolino
-      - "check-success=DeepSource: Go"
-      - "check-success=DeepSource: Secrets"
-      - "check-success=DeepSource: Transformers"
+      - "check-success=CodeQL"
       - "check-success=GitGuardian Security Checks"
       - "check-success=License Compliance"
     actions:
