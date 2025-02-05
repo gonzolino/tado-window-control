@@ -6,7 +6,7 @@ toolchain go1.23.5
 
 require (
 	cloud.google.com/go/secretmanager v1.14.3
-	github.com/gonzolino/gotado/v2 v2.1.0
+	github.com/gonzolino/gotado/v2 v2.1.1
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697
 )
 
@@ -29,7 +29,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/oauth2 v0.24.0 // indirect
+	golang.org/x/oauth2 v0.25.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
