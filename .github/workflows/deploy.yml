@@ -21,7 +21,7 @@ jobs:
       - uses: google-github-actions/deploy-cloud-functions@ab10d6b9be21630aafc15ced4c464c16cd6640d6 # v4.0.0
         with:
           name: tado-window-close
-          runtime: go123
+          runtime: go125
           entry_point: CloseWindow
           region: ${{ secrets.GCP_REGION }}
           environment_variables: GCP_PROJECT=${{ secrets.GCP_PROJECT_ID }},TADO_CLIENT_ID=${{ secrets.TADO_CLIENT_ID }},TADO_CLIENT_SECRET=${{ secrets.TADO_CLIENT_SECRET }}
