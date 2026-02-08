@@ -24,5 +24,5 @@ jobs:
           runtime: go123
           entry_point: CloseWindow
           region: ${{ secrets.GCP_REGION }}
-          env_vars: GCP_PROJECT=${{ secrets.GCP_PROJECT_ID }},TADO_CLIENT_ID=${{ secrets.TADO_CLIENT_ID }},TADO_CLIENT_SECRET=${{ secrets.TADO_CLIENT_SECRET }}
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          environment_variables: GCP_PROJECT=${{ secrets.GCP_PROJECT_ID }},TADO_CLIENT_ID=${{ secrets.TADO_CLIENT_ID }},TADO_CLIENT_SECRET=${{ secrets.TADO_CLIENT_SECRET }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
