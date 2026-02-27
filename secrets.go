@@ -35,3 +35,18 @@ func (sm *SecretManager) AccessSecret(ctx context.Context, projectID, secretName
 	}
 	return string(result.Payload.Data), nil
 }
+
+// AddSecretVersion adds a new version of the given secret with the provided data
+func (sm *SecretManager) AddSecretVersion(ctx context.Context, projectID, secretName string, data []byte) error {
+	req := &secretmanagerpb.AddSecretVersionRequest{
+		Parent: fmt.Sprintf("projects/%s/secrets/%s", projectID, secretName),
+		Payload: &secretmanagerpb.SecretPayload{
+			Data: data,
+		},
+	}
+	_, err := sm.client.AddSecretVersion(ctx, req)
+	if err != nil {
+		return fmt.Errorf("unable to add secret version for %s in project %s: %w", secretName, projectID, err)
+	}
+	return nil
+}

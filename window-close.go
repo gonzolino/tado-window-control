@@ -8,11 +8,11 @@ import (
 	"os"
 
 	"github.com/gonzolino/gotado/v2"
+	"golang.org/x/oauth2"
 )
 
 const (
-	secretTadoUsername = "tado_username"
-	secretTadoPassword = "tado_password"
+	secretTadoOAuthToken = "tado_oauth_token"
 )
 
 // TadoWindowCloseAction holds tado° zone in which a window was closed
@@ -58,12 +58,6 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
-	tadoClientSecret, ok := os.LookupEnv("TADO_CLIENT_SECRET")
-	if !ok {
-		log.Println("Missing environment variable 'TADO_CLIENT_SECRET'")
-		httpError(w, http.StatusInternalServerError)
-		return
-	}
 
 	ctx := r.Context()
 	secretmanager, err := NewSecretManager(ctx)
@@ -82,32 +76,31 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tadoUsername, err := secretmanager.AccessSecret(ctx, projectID, secretTadoUsername)
+	tokenJSON, err := secretmanager.AccessSecret(ctx, projectID, secretTadoOAuthToken)
 	if err != nil {
-		log.Printf("Failed to get tado username: %v", err)
+		log.Printf("Failed to get tado OAuth token: %v", err)
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
-	tadoPassword, err := secretmanager.AccessSecret(ctx, projectID, secretTadoPassword)
-	if err != nil {
-		log.Printf("Failed to get tado password: %v", err)
+	var token oauth2.Token
+	if err := json.Unmarshal([]byte(tokenJSON), &token); err != nil {
+		log.Printf("Failed to parse tado OAuth token: %v", err)
 		httpError(w, http.StatusInternalServerError)
 		return
 	}
 
-	// tadoClient, err := gotado.NewClient(tadoClientID, tadoClientSecret).
-	// 	WithTimeout(5*time.Second).
-	// 	WithCredentials(ctx, tadoUsername, tadoPassword)
-	// if err != nil {
-	// 	// Treat failed tado login as internal server error, since credentials,
-	// 	// authentication, etc. of tado° is all managed on the server side. User has no
-	// 	log.Printf("Failed tado° login: %v", err)
-	// 	httpError(w, http.StatusInternalServerError)
-	// 	return
-	// }
-
-	tado := gotado.New(tadoClientID, tadoClientSecret)
-	user, err := tado.Me(ctx, tadoUsername, tadoPassword)
+	config := gotado.AuthConfig(tadoClientID, "offline_access")
+	tado := gotado.NewWithTokenRefreshCallback(ctx, config, &token, func(newToken *oauth2.Token) {
+		data, err := json.Marshal(newToken)
+		if err != nil {
+			log.Printf("Failed to serialize refreshed tado OAuth token: %v", err)
+			return
+		}
+		if err := secretmanager.AddSecretVersion(ctx, projectID, secretTadoOAuthToken, data); err != nil {
+			log.Printf("Failed to persist refreshed tado OAuth token: %v", err)
+		}
+	})
+	user, err := tado.Me(ctx)
 	if err != nil {
 		log.Printf("Failed to get user info from tado°: %v", err)
 		httpError(w, http.StatusInternalServerError)
