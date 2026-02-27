@@ -9,7 +9,7 @@ import (
 	"github.com/gonzolino/gotado/v2"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
-	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
+	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
 )
 
 const secretTadoOAuthToken = "tado_oauth_token"
