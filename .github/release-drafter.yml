@@ -11,6 +11,7 @@ version-resolver:
   patch:
     labels:
       - bug
+      - chore
       - dependencies
   default: minor
 
