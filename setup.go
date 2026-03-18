@@ -16,6 +16,7 @@ const (
 	secretTadoOAuthToken = "tado_oauth_token"
 )
 
+// httpError writes a standard HTTP error response with the given status code.
 func httpError(w http.ResponseWriter, code int) {
 	http.Error(w, http.StatusText(code), code)
 }

@@ -10,6 +10,7 @@ const (
 	secretAuthTokens = "auth_tokens"
 )
 
+// isValidToken checks whether the given token matches one of the valid auth tokens stored in Secret Manager.
 func isValidToken(ctx context.Context, secretmanager *SecretManager, projectID, token string) (bool, error) {
 	tokenStr, err := secretmanager.AccessSecret(ctx, projectID, secretAuthTokens)
 	if err != nil {
