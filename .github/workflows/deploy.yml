@@ -6,8 +6,8 @@ on:
       - released
 
 jobs:
-  deploy:
-    name: Deploy Cloud Function
+  deploy-window-close:
+    name: Deploy tado-window-close
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
@@ -26,6 +26,18 @@ jobs:
           region: ${{ secrets.GCP_REGION }}
           environment_variables: GCP_PROJECT=${{ secrets.GCP_PROJECT_ID }},TADO_CLIENT_ID=${{ secrets.TADO_CLIENT_ID }}
           service_account: ${{ secrets.GCP_SA_EMAIL }}
+  deploy-refresh-token:
+    name: Deploy tado-refresh-token
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SA_EMAIL }}
       - uses: google-github-actions/deploy-cloud-functions@ab10d6b9be21630aafc15ced4c464c16cd6640d6 # v4.0.0
         with:
           name: tado-refresh-token
