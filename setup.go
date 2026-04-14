@@ -30,15 +30,9 @@ type handlerSetup struct {
 }
 
 // initHandler performs the common setup shared by all HTTP handlers:
-// reading env vars, creating the secret manager, validating the auth token,
-// and loading the tado OAuth token. It writes an HTTP error and returns nil
-// if any step fails.
-func initHandler(ctx context.Context, w http.ResponseWriter, authToken string) *handlerSetup {
-	if authToken == "" {
-		httpError(w, http.StatusForbidden)
-		return nil
-	}
-
+// reading env vars, creating the secret manager  and loading the tado OAuth
+// token. It writes an HTTP error and returns nil if any step fails.
+func initHandler(ctx context.Context, w http.ResponseWriter) *handlerSetup {
 	projectID, ok := os.LookupEnv("GCP_PROJECT")
 	if !ok {
 		log.Println("Missing environment variable 'GCP_PROJECT'")
@@ -56,15 +50,6 @@ func initHandler(ctx context.Context, w http.ResponseWriter, authToken string) *
 	if err != nil {
 		log.Printf("Failed to create secretmanager: %v", err)
 		httpError(w, http.StatusInternalServerError)
-		return nil
-	}
-
-	if ok, err := isValidToken(ctx, secretmanager, projectID, authToken); err != nil {
-		log.Printf("Failed to get auth tokens: %v", err)
-		httpError(w, http.StatusInternalServerError)
-		return nil
-	} else if !ok {
-		httpError(w, http.StatusForbidden)
 		return nil
 	}
 

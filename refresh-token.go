@@ -1,28 +1,16 @@
 package windowcontrol
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 )
 
-// RefreshTokenRequest holds the authentication token for the refresh request
-type RefreshTokenRequest struct {
-	Token string `json:"token"`
-}
-
 // RefreshToken refreshes the tado° OAuth token and stores the new token in Secret Manager
 func RefreshToken(w http.ResponseWriter, r *http.Request) {
-	var req RefreshTokenRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		httpError(w, http.StatusBadRequest)
-		return
-	}
-
 	ctx := r.Context()
 
-	setup := initHandler(ctx, w, req.Token)
+	setup := initHandler(ctx, w)
 	if setup == nil {
 		return
 	}
