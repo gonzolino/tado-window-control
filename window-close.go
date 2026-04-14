@@ -12,7 +12,6 @@ import (
 
 // TadoWindowCloseAction holds tado° zone in which a window was closed
 type TadoWindowCloseAction struct {
-	Token    string `json:"token"`
 	HomeName string `json:"home_name"`
 	ZoneName string `json:"zone_name"`
 }
@@ -35,7 +34,7 @@ func CloseWindow(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	setup := initHandler(ctx, w, action.Token)
+	setup := initHandler(ctx, w)
 	if setup == nil {
 		return
 	}
