@@ -23,7 +23,6 @@ import (
 type tokenRequest struct {
 	ClientEmail    string `json:"client_email"`
 	PrivateKey     string `json:"private_key"`
-	TokenURI       string `json:"token_uri"`
 	TargetAudience string `json:"target_audience"`
 }
 
@@ -31,6 +30,10 @@ type cachedToken struct {
 	IDToken string
 	Expiry  time.Time
 }
+
+const (
+	tokenURI = "https://oauth2.googleapis.com/token"
+)
 
 var (
 	cache   = map[string]cachedToken{}
@@ -71,14 +74,8 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	if req.PrivateKey == "" {
 		req.PrivateKey = os.Getenv("GCP_PRIVATE_KEY")
 	}
-	if req.TokenURI == "" {
-		req.TokenURI = os.Getenv("GCP_TOKEN_URI")
-	}
 	if req.TargetAudience == "" {
 		req.TargetAudience = os.Getenv("GCP_TARGET_AUDIENCE")
-	}
-	if req.TokenURI == "" {
-		req.TokenURI = "https://oauth2.googleapis.com/token"
 	}
 
 	// Validate required fields
@@ -104,7 +101,7 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	payload, err := json.Marshal(map[string]any{
 		"iss":             req.ClientEmail,
 		"sub":             req.ClientEmail,
-		"aud":             req.TokenURI,
+		"aud":             tokenURI,
 		"iat":             now.Unix(),
 		"exp":             now.Add(time.Hour).Unix(),
 		"target_audience": req.TargetAudience,
@@ -132,7 +129,7 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	signedJWT := signingInput + "." + base64url(sig)
 
 	// Exchange for identity token
-	resp, err := http.PostForm(req.TokenURI, url.Values{
+	resp, err := http.PostForm(tokenURI, url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
 		"assertion":  {signedJWT},
 	})
