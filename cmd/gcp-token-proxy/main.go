@@ -71,15 +71,11 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	if req.PrivateKey == "" {
 		req.PrivateKey = os.Getenv("GCP_PRIVATE_KEY")
 	}
-	if req.TokenURI == "" {
-		req.TokenURI = os.Getenv("GCP_TOKEN_URI")
-	}
 	if req.TargetAudience == "" {
 		req.TargetAudience = os.Getenv("GCP_TARGET_AUDIENCE")
 	}
-	if req.TokenURI == "" {
-		req.TokenURI = "https://oauth2.googleapis.com/token"
-	}
+	// Hardcode token URI to prevent Srequest forgery attacks
+	req.TokenURI = "https://oauth2.googleapis.com/token"
 
 	// Validate required fields
 	if req.ClientEmail == "" || req.PrivateKey == "" || req.TargetAudience == "" {
