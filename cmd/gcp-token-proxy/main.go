@@ -74,13 +74,13 @@ func main() {
 	}
 
 	http.HandleFunc("/token", handleToken)
-	log.Println("listening on :8080")
+	log.Println("starting server")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, `{"error":"method not allowed"}`, http.StatusMethodNotAllowed)
+		jsonError(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -121,6 +121,7 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	cacheMu.RLock()
 	if cached, ok := cache[cacheKey]; ok && time.Now().Add(5*time.Minute).Before(cached.Expiry) {
 		cacheMu.RUnlock()
+		log.Printf("token cache hit for %s -> %s", sanitizeLogValue(req.ClientEmail), sanitizeLogValue(req.TargetAudience))
 		writeJSON(w, map[string]string{"id_token": cached.IDToken})
 		return
 	}
@@ -178,9 +179,7 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadGateway)
-		fmt.Fprintf(w, `{"error":"token endpoint returned %d","details":%s}`, resp.StatusCode, respBody)
+		jsonError(w, fmt.Sprintf("token endpoint returned %d: %s", resp.StatusCode, respBody), http.StatusBadGateway)
 		return
 	}
 
@@ -199,7 +198,14 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 		cacheMu.Unlock()
 	}
 
+	log.Printf("issued new token for %s -> %s", sanitizeLogValue(req.ClientEmail), sanitizeLogValue(req.TargetAudience))
 	writeJSON(w, map[string]string{"id_token": tokenResp.IDToken})
+}
+
+func sanitizeLogValue(s string) string {
+	s = strings.ReplaceAll(s, "\r", `\r`)
+	s = strings.ReplaceAll(s, "\n", `\n`)
+	return s
 }
 
 func base64url(data []byte) string {
@@ -247,6 +253,7 @@ func extractExp(token string) (time.Time, error) {
 }
 
 func jsonError(w http.ResponseWriter, msg string, code int) {
+	log.Printf("error %d: %s", code, msg)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(map[string]string{"error": msg})
