@@ -9,6 +9,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -36,11 +37,42 @@ const (
 )
 
 var (
-	cache   = map[string]cachedToken{}
-	cacheMu sync.RWMutex
+	cache      = map[string]cachedToken{}
+	cacheMu    sync.RWMutex
+	defaultCfg tokenRequest
 )
 
+func loadConfig(path string) error {
+	f, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return json.NewDecoder(f).Decode(&defaultCfg)
+}
+
 func main() {
+	configFile := flag.String("config", os.Getenv("GCP_CONFIG_FILE"), "path to JSON config file")
+	flag.Parse()
+
+	if *configFile != "" {
+		if err := loadConfig(*configFile); err != nil {
+			log.Fatalf("failed to load config file %q: %v", *configFile, err)
+		}
+		log.Printf("loaded config from %s", *configFile)
+	}
+
+	// Env vars take precedence over the config file.
+	if v := os.Getenv("GCP_CLIENT_EMAIL"); v != "" {
+		defaultCfg.ClientEmail = v
+	}
+	if v := os.Getenv("GCP_PRIVATE_KEY"); v != "" {
+		defaultCfg.PrivateKey = v
+	}
+	if v := os.Getenv("GCP_TARGET_AUDIENCE"); v != "" {
+		defaultCfg.TargetAudience = v
+	}
+
 	http.HandleFunc("/token", handleToken)
 	log.Println("listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -67,15 +99,15 @@ func handleToken(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Merge with env var defaults
+	// Fall back to values loaded at startup (config file, then env vars).
 	if req.ClientEmail == "" {
-		req.ClientEmail = os.Getenv("GCP_CLIENT_EMAIL")
+		req.ClientEmail = defaultCfg.ClientEmail
 	}
 	if req.PrivateKey == "" {
-		req.PrivateKey = os.Getenv("GCP_PRIVATE_KEY")
+		req.PrivateKey = defaultCfg.PrivateKey
 	}
 	if req.TargetAudience == "" {
-		req.TargetAudience = os.Getenv("GCP_TARGET_AUDIENCE")
+		req.TargetAudience = defaultCfg.TargetAudience
 	}
 
 	// Validate required fields
