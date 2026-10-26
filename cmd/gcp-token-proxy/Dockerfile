@@ -5,7 +5,7 @@ RUN go mod download
 COPY cmd/gcp-token-proxy/ cmd/gcp-token-proxy/
 RUN CGO_ENABLED=0 go build -o server ./cmd/gcp-token-proxy
 
-FROM alpine:3.24.2
+FROM alpine:3.24.3
 RUN apk add --no-cache ca-certificates
 COPY --from=build /app/server /server
 EXPOSE 8080
